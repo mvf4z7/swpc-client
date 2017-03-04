@@ -23,6 +23,7 @@
     "babel-loader": "^6.3.2",
     "babel-preset-env": "^1.2.0",
     "babel-preset-react": "^6.23.0",
+    "html-webpack-plugin": "^2.28.0",
     "webpack": "^2.2.1"
   },
   "dependencies": {
