@@ -6,7 +6,7 @@ class App extends React.Component {
     return (
       <div>
         <div>SWPC Client</div>
-        <div>Woop!</div>
+        <div>Auto Refresh Enabled!</div>
       </div>
     );
   }

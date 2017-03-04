@@ -1,11 +1,12 @@
 const path = require('path');
 
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const PATHS = {
-  app: path.join(__dirname, 'app'),
+  app: path.join(__dirname, 'src'),
   build: path.join(__dirname, 'build'),
-  htmlTemplate: path.join(__dirname, 'app', 'index.ejs')
+  htmlTemplate: path.join(__dirname, 'src', 'index.ejs')
 };
 
 module.exports = {
