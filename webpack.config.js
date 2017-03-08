@@ -32,8 +32,6 @@ config.development = {
       test: /\.js$/,
       exclude: /(node_modules)/,
       use: [{
-        loader: 'react-hot-loader/webpack',
-      }, {
         loader: 'babel-loader',
         options: {
           presets: [['env', {modules: false}], 'react'],
