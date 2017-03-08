@@ -2,7 +2,8 @@ const path = require('path');
 
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const BabiliPlugin = require('babili-webpack-plugin');
+var CompressionPlugin = require("compression-webpack-plugin");
 
 const PATHS = {
   app: path.join(__dirname, 'src'),
@@ -82,10 +83,18 @@ config.production = {
       filename: path.join(PATHS.public, '/index.html'),
       template: PATHS.htmlTemplate,
     }),
+    new BabiliPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
+    }),
+    new CompressionPlugin({
+      asset: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.html$|\.css$/,
+      threshold: 10240,
+      minRatio: 0.8
     }),
   ]
 };
