@@ -27,6 +27,10 @@ config.development = {
 
   devtool: 'eval-source-map',
 
+  devServer: {
+    historyApiFallback: true
+  },
+
   module: {
     rules: [{
       test: /\.js$/,
@@ -35,6 +39,7 @@ config.development = {
         loader: 'babel-loader',
         options: {
           presets: [['env', {modules: false}], 'react'],
+          plugins: [ 'transform-object-rest-spread' ]
         }
       }]
     }]
