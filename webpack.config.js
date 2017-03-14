@@ -50,6 +50,12 @@ config.development = {
       filename: 'index.html',
       template: PATHS.htmlTemplate,
     }),
+    new webpack.DefinePlugin({
+      APP_ENV: {
+        API_ROOT: JSON.stringify('http://127.0.0.1:3000'),
+        API_VERS: JSON.stringify('/api'),
+      },
+    }),
   ]
 };
 
@@ -90,7 +96,10 @@ config.production = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
-      }
+      },
+      'APP_ENV' : {
+        'API_ROOT': JSON.stringify('undefined'),
+      },
     }),
     new CompressionPlugin({
       asset: "[path].gz[query]",
