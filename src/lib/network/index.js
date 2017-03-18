@@ -1,7 +1,17 @@
 import Auth from '../../util/auth';
+import _ from 'lodash';
 
 const API_ROOT = APP_ENV.API_ROOT;
 const API_VERS = APP_ENV.API_VERS
+
+export const constants = {
+  methods: {
+    GET: 'GET',
+    POST: 'POST',
+    PUT: 'PUT',
+    DELETE: 'DELETE'
+  },
+};
 
 export function makeRequest(path, options) {
   options.method = options.method || 'GET';
@@ -20,24 +30,38 @@ export function makeRequest(path, options) {
   return fetch(path, options)
     .then( response => {
       if(!response.ok) {
-        Promise.reject(response)
+        return response.json()
+          .then( error => {
+            return Promise.reject(error);
+          });
       }
 
       return response.json();
     });
 }
 
+/*
+ * path parameter should include a leading slash
+ *  e.g. /login
+*/
 export function makeApiRequest(path, options = {}) {
-  path = `${API_ROOT}${API_VERS}${path}`;
-  const token = Auth.getToken();
+  const useAuth = options.useAuth !== undefined
+    ? options.useAuth
+    : true;
+  const fullPath = useAuth 
+    ? `${API_ROOT}${API_VERS}${path}`
+    : `${API_ROOT}${path}`;
+  const token = useAuth
+    ? Auth.getToken()
+    : undefined;
 
-  if(!options.headers) {
+  if(useAuth && !options.headers) {
     options.headers = {
       'Authorization': `JWT ${token}`
     };
-  } else if(!options.headers['Authorization']) {
+  } else if(useAuth && !options.headers['Authorization']) {
     options.headers['Authorization'] = `JWT ${token}`;
   }
 
-  return makeRequest(path, options)
+  return makeRequest(fullPath, options)
 }
