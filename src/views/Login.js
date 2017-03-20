@@ -3,7 +3,6 @@ import React from 'react';
 import User from '../lib/user';
 import { setToken } from '../util/auth';
 
-
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -14,6 +13,7 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      error: undefined,
     };
   }
 
@@ -21,10 +21,16 @@ export default class Login extends React.Component {
     const { 
       email,
       password,
+      error,
     } = this.state;
 
     return (
       <div>
+        {
+          error
+            ? <ErrorContainer error={error} />
+            : null
+        }
         <form onSubmit={this.onSubmit}>
           <div>
             <label htmlFor="email">Email</label>
@@ -56,20 +62,35 @@ export default class Login extends React.Component {
     });
   }
 
-  onSubmit(evt) {
+  async onSubmit(evt) {
     evt.preventDefault();
-
     const {
       email,
       password,
     } = this.state;
-    
-    User.login(email, password)
-      .then( data => {
-        setToken(data.token);
-      })
-      .catch( err => {
-        console.error(err);
+    const { history } = this.props;
+
+    try {
+      const data = await User.login(email, password);
+      setToken(data.token);
+      history.push('/');
+    } catch(error) {
+      this.setState({
+        email: '',
+        password: '',
+        error: error.message,
       });
+    }
   }
+}
+
+const ErrorContainer = ({ error }) => {
+  const styles = {
+    color: 'red',
+    fontWeight: 'bold',
+  };
+
+  return (
+    <div style={styles}>{error}</div>
+  );
 }

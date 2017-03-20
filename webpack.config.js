@@ -16,7 +16,7 @@ const config = {};
 
 config.development = {
   entry: {
-    app: PATHS.app,
+    app: [ 'babel-polyfill', PATHS.app ],
   },
 
   output: {
@@ -61,7 +61,7 @@ config.development = {
 
 config.production = {
   entry: {
-    app: PATHS.app,
+    app: [ 'babel-polyfill', PATHS.app ],
   },
 
   output: {
