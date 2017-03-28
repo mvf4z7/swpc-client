@@ -31,8 +31,8 @@ export function makeRequest(path, options) {
     .then( response => {
       if(!response.ok) {
         return response.json()
-          .then( error => {
-            return Promise.reject(error);
+          .then( json => {
+            return Promise.reject(json);
           });
       }
 
