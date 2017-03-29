@@ -7,7 +7,7 @@ import { makeApiRequest } from '../lib/network';
 export default class Home extends React.Component {
 
   componentDidMount() {
-    makeApiRequest('/')
+    makeApiRequest('/user')
       .then( data => console.log(data))
       .catch( err => console.error(err));
   }
