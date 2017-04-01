@@ -8,14 +8,6 @@ export class Login extends React.Component {
   constructor(props) {
     super(props);
 
-    const { 
-      loggedIn,
-      history,  
-    } = this.props;
-    if(loggedIn) {
-      history.push('/');
-    };
-
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 

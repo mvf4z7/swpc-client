@@ -1,9 +1,17 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-} from 'react-router-dom'
-import AuthedRoute from './components/AuthedRoute';
+import { BrowserRouter as Router } from 'react-router-dom'
+import conditionalRedirectRoute from './components/hoc/conditionRedirectRoute';
+import auth from './util/auth';
+
+const AuthedRoute = conditionalRedirectRoute( () => {
+  const token = auth.getToken();
+  return !token;
+}, { displayName: 'Route', redirectPath: '/login' });
+
+const RedirectIfAuthed = conditionalRedirectRoute( () => {
+  const token = auth.getToken();
+  return !!token;
+}, { displayName: 'Route', redirectPath: '/' });
 
 import Home from './views/Home';
 import Login from './views/Login';
@@ -19,7 +27,7 @@ export default class App extends React.Component {
           <br /><br />
 
           <AuthedRoute path="/" exact component={Home} />
-          <Route path="/login" component={Login} />
+          <RedirectIfAuthed path="/login" component={Login} />
         </div>
       </Router>
     );
