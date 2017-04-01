@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import User from '../lib/user';
-import { setToken } from '../util/auth';
+import User from 'Lib/user';
+import { setToken } from 'Util/auth';
 
 export class Login extends React.Component {
   constructor(props) {

@@ -1,4 +1,4 @@
-import { makeApiRequest, constants } from  '../network';
+import { makeApiRequest, constants } from  'Lib/network';
 const methods = constants.methods;
 
 export function login(email, password) {

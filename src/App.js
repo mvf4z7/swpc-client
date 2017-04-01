@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'
-import conditionalRedirectRoute from './components/hoc/conditionRedirectRoute';
-import auth from './util/auth';
+import conditionalRedirectRoute from 'Components/hoc/conditionRedirectRoute';
+import auth from 'Util/auth';
 
 const AuthedRoute = conditionalRedirectRoute( () => {
   const token = auth.getToken();

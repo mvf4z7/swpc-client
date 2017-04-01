@@ -1,4 +1,4 @@
-import Auth from '../../util/auth';
+import Auth from 'Util/auth';
 import _ from 'lodash';
 
 const API_ROOT = APP_ENV.API_ROOT;

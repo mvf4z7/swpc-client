@@ -9,7 +9,20 @@ const PATHS = {
   app: path.join(__dirname, 'src'),
   build: path.join(__dirname, '/public/build'),
   public: path.join(__dirname, '/public'),
-  htmlTemplate: path.join(__dirname, 'src', 'index.ejs')
+  htmlTemplate: path.join(__dirname, 'src', 'index.ejs'),
+  components: path.join(__dirname, 'src', 'components'),
+  lib: path.join(__dirname, 'src', 'lib'),
+  reduxModules: path.join(__dirname, 'src', 'redux-modules'),
+  util: path.join(__dirname, 'src', 'util'),
+  views: path.join(__dirname, 'src', 'views'),
+};
+
+const aliases = {
+  Components: PATHS.components,
+  Views: PATHS.views,
+  Lib: PATHS.lib,
+  ReduxModules: PATHS.reduxModules,
+  Util: PATHS.util,
 };
 
 const config = {};
@@ -43,6 +56,10 @@ config.development = {
         }
       }]
     }]
+  },
+
+  resolve: {
+    alias: aliases,
   },
 
   plugins: [
@@ -84,6 +101,10 @@ config.production = {
         }
       }]
     }]
+  },
+
+  resolve: {
+    aliases: aliases,
   },
 
   plugins: [

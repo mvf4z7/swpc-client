@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { makeApiRequest } from '../lib/network';
+import { makeApiRequest } from 'Lib/network';
 
 
 export default class Home extends React.Component {
