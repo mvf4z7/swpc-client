@@ -1,11 +1,20 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import User from '../lib/user';
 import { setToken } from '../util/auth';
 
-export default class Login extends React.Component {
+export class Login extends React.Component {
   constructor(props) {
     super(props);
+
+    const { 
+      loggedIn,
+      history,  
+    } = this.props;
+    if(loggedIn) {
+      history.push('/');
+    };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -94,3 +103,9 @@ const ErrorContainer = ({ error }) => {
     <div style={styles}>{error}</div>
   );
 }
+
+function mapStateToProps(state) {
+  return state.auth;
+}
+
+export default connect(mapStateToProps)(Login);
