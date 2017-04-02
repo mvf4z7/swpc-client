@@ -1,9 +1,9 @@
 import { makeApiRequest, constants } from  'Lib/network';
-const methods = constants.methods;
+const Methods = constants.methods;
 
 export function login(email, password) {
   const options = {
-    method: methods.POST,
+    method: Methods.POST,
     body: { email, password },
     useAuth: false,
   };

@@ -28,15 +28,13 @@ export function makeRequest(path, options) {
   }
 
   return fetch(path, options)
-    .then( response => {
-      if(!response.ok) {
-        return response.json()
-          .then( json => {
-            return Promise.reject(json);
-          });
+    .then( async response => {
+      const json = await response.json();
+      if(!response.ok) {    
+        return Promise.reject(json);
       }
-
-      return response.json();
+      
+      return json;
     });
 }
 
@@ -44,6 +42,7 @@ export function makeRequest(path, options) {
  * path parameter should include a leading slash
  *  e.g. /login
 */
+
 export function makeApiRequest(path, options = {}) {
   const useAuth = options.useAuth !== undefined
     ? options.useAuth
@@ -65,3 +64,8 @@ export function makeApiRequest(path, options = {}) {
 
   return makeRequest(fullPath, options)
 }
+
+export default {
+  makeRequest,
+  makeApiRequest,
+};
