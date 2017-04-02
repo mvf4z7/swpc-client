@@ -1,4 +1,4 @@
-import Auth from 'Util/auth';
+import { getToken } from 'Util/authHelpers';
 import _ from 'lodash';
 
 const API_ROOT = APP_ENV.API_ROOT;
@@ -51,7 +51,7 @@ export function makeApiRequest(path, options = {}) {
     ? `${API_ROOT}${API_VERS}${path}`
     : `${API_ROOT}${path}`;
   const token = useAuth
-    ? Auth.getToken()
+    ? getToken()
     : undefined;
 
   if(useAuth && !options.headers) {

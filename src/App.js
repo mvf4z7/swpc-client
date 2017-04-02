@@ -1,15 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom'
 import conditionalRedirectRoute from 'Components/hoc/conditionRedirectRoute';
-import auth from 'Util/auth';
+import { getToken } from 'Util/authHelpers';
 
 const AuthedRoute = conditionalRedirectRoute( () => {
-  const token = auth.getToken();
+  const token = getToken();
   return !token;
 }, { redirectPath: '/login' });
 
 const RedirectIfAuthed = conditionalRedirectRoute( () => {
-  const token = auth.getToken();
+  const token = getToken();
   return !!token;
 }, { redirectPath: '/' });
 
