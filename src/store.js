@@ -1,9 +1,12 @@
 import { 
   combineReducers,
-  createStore, 
+  createStore,
+  applyMiddleware,
+  compose,
 } from 'redux';
-import auth from './util/auth';
-import authActions from './redux-modules/auth/actionCreators';
+import ReduxThunk from 'redux-thunk';
+import { getToken } from './util/authHelpers';
+import { loginSuccess } from './redux-modules/auth/actionCreators';
 
 const isDevelop = process.env.NODE_ENV !== 'production';
 
@@ -14,22 +17,28 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
-const INITIAL_STATE = {};
+const composeEnhancers =
+  isDevelop &&
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : compose;
 
+const enhancer = composeEnhancers(
+  applyMiddleware(ReduxThunk),
+);
+
+const INITIAL_STATE = {};
 const store = createStore(
   rootReducer,
-  INITIAL_STATE,
-  // enable Redux dev tools in non-production environments
-  isDevelop
-    ? window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-    : undefined
+  enhancer,
 );
 
 // TODO: verify token is valid on server before
 // sending dispatching action for login
-const token = auth.getToken();
+const token = getToken();
 if(token) {
-  store.dispatch(authActions.loginSuccess());
+  store.dispatch(loginSuccess());
 };
 
 export default store;

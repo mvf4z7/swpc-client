@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import User from 'Lib/user';
-import { setToken } from 'Util/auth';
+import authHelpers from 'Util/authHelpers';
+import { login } from 'ReduxModules/auth/actionCreators';
 
 export class Login extends React.Component {
   constructor(props) {
@@ -11,6 +12,14 @@ export class Login extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
+    // Should not happen, but safe guard against
+    // a logged in user getting to the login page.
+    const {
+      loggedIn, 
+      history,
+    } = this.props;
+    if(loggedIn) history.push('/');
+
     this.state = {
       email: '',
       password: '',
@@ -18,20 +27,30 @@ export class Login extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { history } = this.props;
+    if(nextProps.loggedIn) {
+      history.push('/');
+    }
+
+    if(nextProps.errors.length) {
+      this.setState({
+        email: '',
+        password: '',
+      });
+    }
+  }
+
   render() {
     const { 
       email,
       password,
-      error,
     } = this.state;
+    const { errors } = this.props
 
     return (
       <div>
-        {
-          error
-            ? <ErrorContainer error={error} />
-            : null
-        }
+        <ErrorContainer errors={errors} />
         <form onSubmit={this.onSubmit}>
           <div>
             <label htmlFor="email">Email</label>
@@ -63,41 +82,48 @@ export class Login extends React.Component {
     });
   }
 
-  async onSubmit(evt) {
+  onSubmit(evt) {
     evt.preventDefault();
+
     const {
       email,
       password,
     } = this.state;
-    const { history } = this.props;
+    const { login } = this.props;
 
-    try {
-      const data = await User.login(email, password);
-      setToken(data.token);
-      history.push('/');
-    } catch(error) {
-      this.setState({
-        email: '',
-        password: '',
-        error: error.message,
-      });
-    }
+    login(email, password)
   }
 }
 
-const ErrorContainer = ({ error }) => {
+const ErrorContainer = ({ errors }) => {
+  if(!errors.length) {
+    return null;
+  }
+
   const styles = {
     color: 'red',
     fontWeight: 'bold',
   };
-
   return (
-    <div style={styles}>{error}</div>
+    <div style={styles}>
+      {
+        errors.map( (error, idx) => <div key={Math.random()}>{error}</div> )
+      }
+    </div>
   );
 }
 
-function mapStateToProps(state) {
+const  mapStateToProps = (state) => {
   return state.auth;
-}
+};
 
-export default connect(mapStateToProps)(Login);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login: (email, password) => dispatch(login(email, password)),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login);

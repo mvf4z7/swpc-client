@@ -18,7 +18,6 @@ export default class Home extends React.Component {
   async componentDidMount() {
     try {
       const itineraries = await Itineraries.list();
-      console.log('itineraries: ', itineraries);
       this.setState({ itineraries });
     } catch(e) {
       console.error(e);
@@ -28,7 +27,6 @@ export default class Home extends React.Component {
       ];
       this.setState({ errors });
     }
-
   }
 
   render() {

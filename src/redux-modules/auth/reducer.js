@@ -11,6 +11,7 @@ export const HANDLERS = {
   [Types.LOGIN_REQUEST]: (state = INITIAL_STATE, action) => {
     return {
       ...state,
+      loggedIn: false,
       fetchingToken: true,
       errors: [],
     };
@@ -26,7 +27,11 @@ export const HANDLERS = {
   },
 
   [Types.LOGIN_FAILURE]: (state = INITIAL_STATE, action) => {
-    const errors = action.payload.errors || [ 'An error occurred while attempting to login.' ];
+    const error = action.payload;
+    const errors = error.message
+      ? [ error.message ]
+      : [ 'An error occurred while attempting to login.' ];
+
     return {
       ...state,
       loggedIn: false,
