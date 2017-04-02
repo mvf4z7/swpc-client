@@ -20,10 +20,7 @@ export default function conditionalRedirectRoute(redirectFunc, options = {}) {
       }} />
     );
   };
-
-  if(options.displayName) {
-    ConditionalRedirectRoute.displayName = options.displayName;
-  }
+  ConditionalRedirectRoute.displayName = options.displayName || 'Route';
 
   return ConditionalRedirectRoute;
 }

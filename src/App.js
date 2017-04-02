@@ -6,12 +6,12 @@ import auth from 'Util/auth';
 const AuthedRoute = conditionalRedirectRoute( () => {
   const token = auth.getToken();
   return !token;
-}, { displayName: 'Route', redirectPath: '/login' });
+}, { redirectPath: '/login' });
 
 const RedirectIfAuthed = conditionalRedirectRoute( () => {
   const token = auth.getToken();
   return !!token;
-}, { displayName: 'Route', redirectPath: '/' });
+}, { redirectPath: '/' });
 
 import Home from './views/Home';
 import Login from './views/Login';
