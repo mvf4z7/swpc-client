@@ -1,11 +1,7 @@
-import { createTypes } from 'redux-sauce';
+import { createTypes } from 'reduxsauce';
+import actionFactory from 'Util/actionFactory';
 
 export default createTypes(`
-  ITINERARIES_LIST_REQUEST
-  ITINERARIES_LIST_SUCCESS
-  ITINERARIES_LIST_FAILURE
-
-  ITINERARIES_GET_REQUEST
-  ITINERARIES_GET_SUCCESS
-  ITINERARIES_GET_FAILURE
+  ${actionFactory.async('ITINERARIES_LIST')}
+  ${actionFactory.async('ITINERARIES_GET')}
 `);
