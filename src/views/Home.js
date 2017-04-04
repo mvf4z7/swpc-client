@@ -1,50 +1,73 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { makeApiRequest } from 'Lib/network';
-import Itineraries from 'Lib/itineraries';
+import { fetchItineraries } from 'ReduxModules/itineraries/actionCreators';
 
 
-export default class Home extends React.Component {
+export class Home extends React.Component {
   constructor(props) {
     super(props);
-    
-    this.state = {
-      itineraries: [],
-      errors: [],
-    };
+
+    this.renderItineraries = this.renderItineraries.bind(this);
   }
 
-  async componentDidMount() {
-    try {
-      const itineraries = await Itineraries.list();
-      this.setState({ itineraries });
-    } catch(e) {
-      console.error(e);
-      const errors = [
-        ...this.state.errors,
-        e.message,
-      ];
-      this.setState({ errors });
-    }
+  componentDidMount() {
+    this.props.fetchItineraries();
   }
 
   render() {
-    const { itineraries } = this.state;
+    const { 
+      fetchingAll,
+      itineraries
+    } = this.props;
     return (
       <div>
         <div>Home View</div>
         <Link to="/login">Go to login page</Link>
-        <ul>
-          {
-            itineraries.map( itinerary => {
-              return (
-                <li key={itinerary.id}>{JSON.stringify(itinerary)}</li>
-              );
-            })
-          }
-        </ul>
+        { this.renderItineraries() }
       </div>
     );
   }
+
+  renderItineraries() {
+    const {
+      fetchingAll,
+      itineraries,
+    } = this.props;
+
+    if(fetchingAll) {
+      return (
+        <div>Loading...</div>
+      );
+    } else {
+      return itineraries.map( itinerary => {
+        return (
+          <li key={itinerary.id}>{JSON.stringify(itinerary)}</li>
+        );
+      });
+    }
+  }
 }
+
+const mapStateToProps = (state) => {
+  const itineraries = _.map(state.itineraries.entityIds, id => {
+    return state.itineraries.entities[id];
+  });
+  const errors = state.itineraries.errors;
+  const fetchingAll = state.itineraries.fetchingAll;
+
+  return {
+    fetchingAll,
+    itineraries,
+    errors,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchItineraries: () => dispatch(fetchItineraries()),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

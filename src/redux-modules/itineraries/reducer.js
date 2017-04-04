@@ -6,6 +6,7 @@ import Types from './actionTypes';
 export const INITIAL_STATE = {
   fetchingAll: false,
   entities: {},
+  entityIds: [],
   status: {},
   softUpdates: {},
   errors: [],
@@ -20,7 +21,7 @@ export const HANDLERS = {
     const status = _.mapValues(state.status, e => {
       return { ...e, loading: true };
     });
-    
+
     return {
       ...state,
       fetchingAll: true,

@@ -2,7 +2,7 @@ import Types from './actionTypes';
 import Itineraries from 'Lib/itineraries';
 
 
-export function list() {
+export function fetchItineraries() {
   return async (dispatch) => {
     dispatch(listRequest());
     try {
@@ -36,7 +36,7 @@ export function listFailure(error) {
 }
 
 export default {
-  list,
+  fetchItineraries,
   listRequest,
   listSuccess,
   listFailure,
