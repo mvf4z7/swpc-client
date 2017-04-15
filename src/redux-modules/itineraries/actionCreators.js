@@ -32,7 +32,14 @@ export function listFailure(error) {
     type: Types.ITINERARIES_LIST_FAILURE,
     payload: error,
     error: true,
-  }
+  };
+}
+
+export function softUpdateItinerary(id, updates) {
+  return {
+    type: Types.ITINERARIES_SOFT_UPDATE,
+    payload: { id, updates },
+  };
 }
 
 export default {

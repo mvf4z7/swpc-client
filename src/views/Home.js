@@ -2,7 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { fetchItineraries } from 'ReduxModules/itineraries/actionCreators';
+import {
+  fetchItineraries,
+  softUpdateItinerary
+} from 'ReduxModules/itineraries/actionCreators';
+
+import ItineraryForm from 'Components/ItineraryForm';
 
 
 export class Home extends React.Component {
@@ -22,7 +27,7 @@ export class Home extends React.Component {
       itineraries
     } = this.props;
     return (
-      <div>
+      <div className="container">
         <div>Home View</div>
         <Link to="/login">Go to login page</Link>
         { this.renderItineraries() }
@@ -34,6 +39,7 @@ export class Home extends React.Component {
     const {
       fetchingAll,
       itineraries,
+      softUpdateItinerary,
     } = this.props;
 
     if(fetchingAll) {
@@ -43,7 +49,10 @@ export class Home extends React.Component {
     } else {
       return itineraries.map( itinerary => {
         return (
-          <li key={itinerary.id}>{JSON.stringify(itinerary)}</li>
+          <ItineraryForm
+            itinerary={itinerary}
+            onChange={softUpdateItinerary}
+            key={itinerary.id} />
         );
       });
     }
@@ -52,7 +61,11 @@ export class Home extends React.Component {
 
 const mapStateToProps = (state) => {
   const itineraries = _.map(state.itineraries.entityIds, id => {
-    return state.itineraries.entities[id];
+    const updates = state.itineraries.softUpdates[id] || {};
+    return {
+      ...state.itineraries.entities[id],
+      ...updates,
+    };
   });
   const errors = state.itineraries.errors;
   const fetchingAll = state.itineraries.fetchingAll;
@@ -67,6 +80,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchItineraries: () => dispatch(fetchItineraries()),
+    softUpdateItinerary: (id, updates) => dispatch(softUpdateItinerary(id, updates)),
   }
 }
 

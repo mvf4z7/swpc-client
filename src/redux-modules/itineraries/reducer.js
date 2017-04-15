@@ -12,7 +12,7 @@ export const INITIAL_STATE = {
   errors: [],
 };
 
-const defaultStatus = {
+const DEFAULT_STATUS = {
   loading: false,
 };
 
@@ -33,7 +33,7 @@ export const HANDLERS = {
     const entities = _.keyBy(action.payload, 'id');
     const entityIds = _.map(action.payload, 'id');
     const status = _.mapValues(entities, e => {
-      return { ...defaultStatus };
+      return { ...DEFAULT_STATUS };
     });
 
     return {
@@ -62,6 +62,23 @@ export const HANDLERS = {
         ...newErrors,
       ]
     };
+  },
+
+  [Types.ITINERARIES_SOFT_UPDATE]: (state = INITIAL_STATE, action) => {
+    const { id, updates: newUpdates } = action.payload;
+    const currentUpdates = state.softUpdates[id] || {};
+    const softUpdates = {
+      ...state.softUpdates,
+      [id]: {
+        ...currentUpdates,
+        ...newUpdates,
+      },
+    };
+
+    return {
+      ...state,
+      softUpdates: { ...softUpdates }
+    }
   },
 };
 

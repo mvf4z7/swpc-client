@@ -35,6 +35,7 @@
     "webpack-dev-server": "^2.4.1"
   },
   "dependencies": {
+    "airports": "^1.0.0",
     "body-parser": "^1.17.0",
     "cookie-parser": "^1.4.3",
     "debug": "^2.6.1",
