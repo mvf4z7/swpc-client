@@ -37,8 +37,15 @@ export function listFailure(error) {
 
 export function softUpdateItinerary(id, updates) {
   return {
-    type: Types.ITINERARIES_SOFT_UPDATE,
+    type: Types.ITINERARIES_SOFT_UPDATES,
     payload: { id, updates },
+  };
+}
+
+export function softUpdateItineraryReset(id) {
+  return {
+    type: Types.ITINERARIES_SOFT_UPDATES_RESET,
+    payload: { id },
   };
 }
 
@@ -47,4 +54,7 @@ export default {
   listRequest,
   listSuccess,
   listFailure,
+
+  softUpdateItinerary,
+  softUpdateItineraryReset,
 };

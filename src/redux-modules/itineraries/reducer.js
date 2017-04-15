@@ -64,7 +64,7 @@ export const HANDLERS = {
     };
   },
 
-  [Types.ITINERARIES_SOFT_UPDATE]: (state = INITIAL_STATE, action) => {
+  [Types.ITINERARIES_SOFT_UPDATES]: (state = INITIAL_STATE, action) => {
     const { id, updates: newUpdates } = action.payload;
     const currentUpdates = state.softUpdates[id] || {};
     const softUpdates = {
@@ -77,8 +77,17 @@ export const HANDLERS = {
 
     return {
       ...state,
-      softUpdates: { ...softUpdates }
+      softUpdates
     }
+  },
+
+  [Types.ITINERARIES_SOFT_UPDATES_RESET]: (state = INITIAL_STATE, action) => {
+    const { id } = action.payload;
+
+    return {
+      ...state,
+      softUpdates: _.omit(state.softUpdates, id),
+    };
   },
 };
 

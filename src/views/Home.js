@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import {
   fetchItineraries,
-  softUpdateItinerary
+  softUpdateItinerary,
+  softUpdateItineraryReset,
 } from 'ReduxModules/itineraries/actionCreators';
 
 import ItineraryForm from 'Components/ItineraryForm';
@@ -40,6 +41,8 @@ export class Home extends React.Component {
       fetchingAll,
       itineraries,
       softUpdateItinerary,
+      resetSoftUpdates,
+      modifiedIds,
     } = this.props;
 
     if(fetchingAll) {
@@ -48,10 +51,13 @@ export class Home extends React.Component {
       );
     } else {
       return itineraries.map( itinerary => {
+        const isModified = modifiedIds.indexOf(itinerary.id) !== -1;
         return (
           <ItineraryForm
             itinerary={itinerary}
             onChange={softUpdateItinerary}
+            onReset={resetSoftUpdates}
+            isModified={isModified}
             key={itinerary.id} />
         );
       });
@@ -67,12 +73,14 @@ const mapStateToProps = (state) => {
       ...updates,
     };
   });
+  const modifiedIds = Object.keys(state.itineraries.softUpdates).map( strId => parseInt(strId));
   const errors = state.itineraries.errors;
   const fetchingAll = state.itineraries.fetchingAll;
 
   return {
     fetchingAll,
     itineraries,
+    modifiedIds,
     errors,
   };
 };
@@ -81,6 +89,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchItineraries: () => dispatch(fetchItineraries()),
     softUpdateItinerary: (id, updates) => dispatch(softUpdateItinerary(id, updates)),
+    resetSoftUpdates: id => dispatch(softUpdateItineraryReset(id)),
   }
 }
 

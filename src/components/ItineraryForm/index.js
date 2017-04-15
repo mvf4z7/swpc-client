@@ -1,5 +1,5 @@
 import React from 'react';
-
+import glamorous from 'glamorous';
 import Airports from 'Util/airports';
 
 const airportOptions = Airports.map( airport => {
@@ -15,9 +15,34 @@ const propTypes = {
   })),
 };
 
-const ItineraryForm = ({ itinerary, onChange, onReset }) => {
+const Wrapper = glamorous.div({
+  padding: '10px',
+  marginBottom: '10px',
+  border: '1px solid gray',
+});
+
+const ButtonContainer = glamorous.div({
+  display: 'flex',
+  justifyContent: 'center',
+});
+
+const baseButtonStyles = {
+  width: '10em',
+  padding: '1em',
+  margin: '0em 1em',
+};
+const SaveButton = glamorous.button({
+  ...baseButtonStyles,
+  backgroundColor: 'green',
+});
+const CancelButton = glamorous.button({
+  ...baseButtonStyles,
+  backgroundColor: 'red',
+});
+
+const ItineraryForm = ({ itinerary, onChange, onReset, isModified }) => {
   return (
-    <div>
+    <Wrapper>
       <form>
         <div className="form-group row">
           <div className="col-sm-6">
@@ -46,7 +71,15 @@ const ItineraryForm = ({ itinerary, onChange, onReset }) => {
           <input type="text" className="form-control" id="formGroupExampleInput" placeholder="Example input" />
         </div>
       </form>
-    </div>
+      {
+        isModified ? (
+          <ButtonContainer>
+            <CancelButton onClick={() => onReset(itinerary.id)}>RESET CHANGES</CancelButton>
+            <SaveButton>SAVE CHANGES</SaveButton>
+          </ButtonContainer>
+        ) : null
+      }
+    </Wrapper>
   );
 };
 
@@ -56,6 +89,6 @@ function buildUpdateObj(evt) {
   };
 }
 
-export default ItineraryForm;
-
 ItineraryForm.propTypes = propTypes;
+
+export default ItineraryForm;
