@@ -104,7 +104,7 @@ config.production = {
   },
 
   resolve: {
-    aliases: aliases,
+    alias: aliases,
   },
 
   plugins: [
