@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import {
   fetchItineraries,
+  updateItinerary,
   softUpdateItinerary,
   softUpdateItineraryReset,
 } from 'ReduxModules/itineraries/actionCreators';
@@ -40,6 +41,7 @@ export class Home extends React.Component {
     const {
       fetchingAll,
       itineraries,
+      updateItinerary,
       softUpdateItinerary,
       resetSoftUpdates,
       modifiedIds,
@@ -57,6 +59,7 @@ export class Home extends React.Component {
             itinerary={itinerary}
             onChange={softUpdateItinerary}
             onReset={resetSoftUpdates}
+            onSave={updateItinerary}
             isModified={isModified}
             key={itinerary.id} />
         );
@@ -88,6 +91,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchItineraries: () => dispatch(fetchItineraries()),
+    updateItinerary: (id, updates) => dispatch(updateItinerary(id, updates)),
     softUpdateItinerary: (id, updates) => dispatch(softUpdateItinerary(id, updates)),
     resetSoftUpdates: id => dispatch(softUpdateItineraryReset(id)),
   }

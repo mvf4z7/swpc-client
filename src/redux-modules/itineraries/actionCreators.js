@@ -14,6 +14,18 @@ export function fetchItineraries() {
   };
 }
 
+export function updateItinerary(id, updates) {
+  return async (dispatch) => {
+    dispatch(updateRequest(id));
+    try {
+      const resp = await Itineraries.update(id, updates);
+      dispatch(updateSuccess(id, resp));
+    } catch(error) {
+      dispatch(updateFailure(id, error.message));
+    }
+  };
+}
+
 export function listRequest() {
   return {
     type: Types.ITINERARIES_LIST_REQUEST,
@@ -31,6 +43,28 @@ export function listFailure(error) {
   return {
     type: Types.ITINERARIES_LIST_FAILURE,
     payload: error,
+    error: true,
+  };
+}
+
+export function updateRequest(id) {
+  return {
+    type: Types.ITINERARIES_UPDATE_REQUEST,
+    payload: { id },
+  };
+}
+
+export function updateSuccess(id, data) {
+  return {
+    type: Types.ITINERARIES_UPDATE_SUCCESS,
+    payload: { id, data }
+  };
+}
+
+export function updateFailure(id, error) {
+  return {
+    type: Types.ITINERARIES_UPDATE_FAILURE,
+    payload: { id, error },
     error: true,
   };
 }
@@ -54,6 +88,11 @@ export default {
   listRequest,
   listSuccess,
   listFailure,
+
+  updateItinerary,
+  updateRequest,
+  updateSuccess,
+  updateFailure,
 
   softUpdateItinerary,
   softUpdateItineraryReset,

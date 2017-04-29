@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import glamorous from 'glamorous';
 import Airports from 'Util/airports';
 import DatePicker from 'react-datepicker';
@@ -48,11 +49,12 @@ const CancelButton = glamorous.button({
   backgroundColor: 'red',
 });
 
-const ItineraryForm = ({ itinerary, onChange, onReset, isModified }) => {
+const ItineraryForm = ({ itinerary, onChange, onReset, onSave, isModified }) => {
 
   return (
     <Wrapper>
       <form>
+        <div>id: {itinerary.id}</div>
         <div className="form-group row">
           <div className="col-sm-6">
             <label htmlFor={`origin_airport_${itinerary.id}`}>Origin</label>
@@ -78,13 +80,13 @@ const ItineraryForm = ({ itinerary, onChange, onReset, isModified }) => {
           </div>
         </div>
         <div className="form-group row">
-          <div className="col-sm-6">
+          <div className="col-sm-6 text-center">
             <DatePickerLabel>DEPART DATE</DatePickerLabel>
             <DatePicker
               selected={moment(itinerary.outbound_date, 'MM/DD/YYYY')}
               onChange={ date => onChange(itinerary.id, buildDateUpdateObj('outbound_date', date)) } />
           </div>
-          <div className="col-sm-6">
+          <div className="col-sm-6 text-center">
             <DatePickerLabel>RETURN DATE</DatePickerLabel>
             <DatePicker
               selected={moment(itinerary.return_date, 'MM/DD/YYYY')}
@@ -96,7 +98,7 @@ const ItineraryForm = ({ itinerary, onChange, onReset, isModified }) => {
         isModified ? (
           <ButtonContainer>
             <CancelButton onClick={() => onReset(itinerary.id)}>RESET CHANGES</CancelButton>
-            <SaveButton>SAVE CHANGES</SaveButton>
+            <SaveButton onClick={() => onSave(itinerary.id, transformForSave(itinerary))}>SAVE CHANGES</SaveButton>
           </ButtonContainer>
         ) : null
       }
@@ -105,6 +107,7 @@ const ItineraryForm = ({ itinerary, onChange, onReset, isModified }) => {
 };
 
 ItineraryForm.propTypes = propTypes;
+export default ItineraryForm;
 
 function buildUpdateObj(evt) {
   return {
@@ -118,4 +121,14 @@ function buildDateUpdateObj(name, momentObj) {
   };
 }
 
-export default ItineraryForm;
+function transformForSave(itinerary) {
+  const data =  _.pick(itinerary, [
+    'two_way_trip',
+    'origin_airport',
+    'destination_airport',
+    'outbound_date',
+    'return_date',
+    'adult_passenger_count',
+  ]);
+  return data;
+}

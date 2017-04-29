@@ -15,7 +15,7 @@ export const constants = {
 
 export function makeRequest(path, options) {
   options.method = options.method || 'GET';
-  if(options.method === 'POST' && typeof options.body !== 'string') {
+  if(options.body && typeof options.body !== 'string') {
     options.body = JSON.stringify(options.body);
   }
 

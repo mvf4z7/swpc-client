@@ -9,11 +9,14 @@ export const INITIAL_STATE = {
   entityIds: [],
   status: {},
   softUpdates: {},
-  errors: [],
+  errors: {
+    global: [],
+  },
 };
 
 const DEFAULT_STATUS = {
   loading: false,
+  saving: false,
 };
 
 export const HANDLERS = {
@@ -35,6 +38,10 @@ export const HANDLERS = {
     const status = _.mapValues(entities, e => {
       return { ...DEFAULT_STATUS };
     });
+    const errors = {
+      ...state.errors,
+      global: []
+    }
 
     return {
       ...state,
@@ -42,8 +49,8 @@ export const HANDLERS = {
       entities,
       entityIds,
       status,
-      softUpdates: {},
-      errors: [],
+      errors,
+      softUpdates: {}
     };
   },
 
@@ -51,16 +58,83 @@ export const HANDLERS = {
     const status = _.mapValues(state.status, e => {
       return { ...e, loading: false };
     });
-    const newErrors = _.isArray(action.payload) ? action.payload : [ action.payload ];
+    const globalErrors = _.isArray(action.payload) ? action.payload : [ action.payload ];
 
     return {
       ...state,
       fetchingAll: false,
       status,
-      errors: [
+      errors: {
         ...state.errors,
-        ...newErrors,
-      ]
+        global: globalErrors,
+      }
+    };
+  },
+
+  [Types.ITINERARIES_UPDATE_REQUEST]: (state = INITIAL_STATE, action) => {
+    const { id } = action.payload;
+    const status = {
+      ...state.status,
+      [id]: {
+        ...state.status[id],
+        saving: true,
+      }
+    };
+
+    return {
+      ...state,
+      status,
+    };
+  },
+
+  [Types.ITINERARIES_UPDATE_SUCCESS]: (state = INITIAL_STATE, action) => {
+    const { id, data } = action.payload;
+    const entities = {
+      ...state.entities,
+      [id]: data,
+    };
+    const status = {
+      ...state.status,
+      [id]: {
+        ...state.status[id],
+        saving: false,
+      },
+    };
+    const softUpdates = _.omit(state.softUpdates, id);
+    const errors = {
+      ...state.errors,
+      [id]: [],
+    };
+
+    return {
+      ...state,
+      entities,
+      status,
+      softUpdates,
+      errors,
+    };
+  },
+
+  [Types.ITINERARIES_UPDATE_FAILURE]: (state = INITIAL_STATE, action) => {
+    const { id, error: newError } = action.payload
+    const oldErrors = state.errors[id] || [];
+    
+    const status = {
+      ...state.status,
+      [id]: {
+        ...state.status[id],
+        saving: false,
+      }
+    };
+    const errors = {
+      ...state.errors,
+      [id]: [ ...oldErrors, newError ],
+    };
+
+    return {
+      ...state,
+      status,
+      errors,
     };
   },
 
