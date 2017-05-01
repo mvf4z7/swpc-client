@@ -12,12 +12,11 @@ const airportOptions = Airports.map( airport => {
 });
 
 const propTypes = {
-  itinerary: React.PropTypes.shape({
-    
-  }),
-  airports: React.PropTypes.arrayOf(React.PropTypes.shape({
-
-  })),
+  itinerary: React.PropTypes.object,
+  onChange: React.PropTypes.func,
+  onReset: React.PropTypes.func,
+  onSave: React.PropTypes.func,
+  isModified: React.PropTypes.bool,
 };
 
 const Wrapper = glamorous.div({
