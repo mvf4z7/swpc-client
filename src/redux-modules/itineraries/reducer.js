@@ -16,7 +16,8 @@ export const INITIAL_STATE = {
 
 const DEFAULT_STATUS = {
   loading: false,
-  saving: false,
+  updating: false,
+  creating: false,
 };
 
 export const HANDLERS = {
@@ -77,7 +78,7 @@ export const HANDLERS = {
       ...state.status,
       [id]: {
         ...state.status[id],
-        saving: true,
+        updating: true,
       }
     };
 
@@ -97,7 +98,7 @@ export const HANDLERS = {
       ...state.status,
       [id]: {
         ...state.status[id],
-        saving: false,
+        updating: false,
       },
     };
     const softUpdates = _.omit(state.softUpdates, id);
@@ -123,7 +124,7 @@ export const HANDLERS = {
       ...state.status,
       [id]: {
         ...state.status[id],
-        saving: false,
+        updating: false,
       }
     };
     const errors = {
