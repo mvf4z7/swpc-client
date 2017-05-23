@@ -16,6 +16,14 @@ export function update(id, updates) {
   return makeApiRequest(`/itineraries/${id}`, options);
 }
 
+export function create(data) {
+  const options = {
+    method: Methods.POST,
+    body: data,
+  };
+  return makeApiRequest('/itineraries', options);
+}
+
 export default {
   list,
   update,

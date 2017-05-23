@@ -7,9 +7,13 @@ import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const airportOptions = Airports.map( airport => {
+let airportOptions = Airports.map( airport => {
   return <option value={airport.code} key={airport.code}>{airport.name} ({airport.code})</option>
 });
+airportOptions = [
+  <option key={Math.random()} disabled hidden value="">Select an Airport</option>,
+  ...airportOptions
+];
 
 const propTypes = {
   itinerary: React.PropTypes.object,

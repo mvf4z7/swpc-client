@@ -40,7 +40,7 @@ export function makeRequest(path, options) {
 
 /*
  * path parameter should include a leading slash
- *  e.g. /login
+ *  e.g. /login or /itineraries/33
 */
 
 export function makeApiRequest(path, options = {}) {

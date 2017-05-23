@@ -10,6 +10,7 @@ import {
 } from 'ReduxModules/itineraries/actionCreators';
 
 import ItineraryForm from 'Components/ItineraryForm';
+import CreateItinerary from 'Components/CreateItinerary';
 
 
 export class Home extends React.Component {
@@ -31,7 +32,7 @@ export class Home extends React.Component {
     return (
       <div className="container">
         <div>Home View</div>
-        <Link to="/login">Go to login page</Link>
+        <CreateItinerary />
         { this.renderItineraries() }
       </div>
     );
